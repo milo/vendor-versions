@@ -53,23 +53,17 @@ class Panel implements Tracy\IBarPanel
 	{
 		ob_start();
 
+		$jsonFile = $this->dir . DIRECTORY_SEPARATOR . 'composer.json';
+		$lockFile = $this->dir . DIRECTORY_SEPARATOR . 'composer.lock';
+
+		$required = $this->decode($jsonFile);
+		$installed = $this->decode($lockFile);
+
 		if ($this->error === NULL) {
-			$file = $this->dir . DIRECTORY_SEPARATOR . 'composer.lock';
-			$json = @file_get_contents($file);
-			if ($json === FALSE) {
-				$this->error = error_get_last()['message'];
-				return NULL;
-			}
-
-			$decoded = @json_decode($json, TRUE);
-			if (!is_array($decoded)) {
-				$this->error = error_get_last()['message'];
-				return NULL;
-			}
-
+			$required += ['require' => [], 'require-dev' => []];
 			$data = [
-				'Packages' => self::format($decoded['packages']),
-				'Dev Packages' => self::format($decoded['packages-dev']),
+				'Packages' => self::format($installed['packages'], $required['require']),
+				'Dev Packages' => self::format($installed['packages-dev'], $required['require-dev']),
 			];
 		}
 
@@ -82,17 +76,23 @@ class Panel implements Tracy\IBarPanel
 
 	/**
 	 * @param  array $packages
+	 * @param  array $required
 	 * @return array
 	 */
-	private static function format(array $packages)
+	private static function format(array $packages, array $required)
 	{
 		$data = [];
 		foreach ($packages as $p) {
 			$data[$p['name']] = (object) [
-				'version' => $p['version'] . ($p['version'] === 'dev-master'
+				'installed' => $p['version'] . ($p['version'] === 'dev-master'
 					? (' #' . substr($p['source']['reference'], 0, 7))
 					: ''
 				),
+
+				'required' => isset($required[$p['name']])
+					? $required[$p['name']]
+					: NULL,
+
 				'url' => isset($p['source']['url'])
 					? preg_replace('/\.git$/', '', $p['source']['url'])
 					: NULL,
@@ -101,6 +101,28 @@ class Panel implements Tracy\IBarPanel
 
 		ksort($data);
 		return $data;
+	}
+
+
+	/**
+	 * @param  string $file
+	 * @return array|NULL
+	 */
+	private function decode($file)
+	{
+		$json = @file_get_contents($file);
+		if ($json === FALSE) {
+			$this->error = error_get_last()['message'];
+			return NULL;
+		}
+
+		$decoded = @json_decode($json, TRUE);
+		if (!is_array($decoded)) {
+			$this->error = error_get_last()['message'];
+			return NULL;
+		}
+
+		return $decoded;
 	}
 
 }

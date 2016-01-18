@@ -9,7 +9,8 @@ function h($str) {
 }
 
 /**
- * @var  string|NULL $file
+ * @var  string|NULL $lockFile
+ * @var  string|NULL $jsonFile
  * @var  string|NULL $error
  * @var  array $data
  */
@@ -24,12 +25,17 @@ function h($str) {
 	}
 
 	.milo-VendorVersionsPanel .tracy-inner {
-		width: 350px;
+		width: 500px;
 	}
 
 	.milo-VendorVersionsPanel table {
 		white-space: nowrap;
 		font: 9pt/1.5 Consolas,monospace !important;
+	}
+
+	.milo-VendorVersionsPanel td.version {
+		/*color: green !important;*/
+		font-weight: bold !important;
 	}
 </style>
 
@@ -45,20 +51,22 @@ function h($str) {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Version</th>
+						<th>Installed</th>
+						<th>Required</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ($packages as $name => $p): ?>
 						<tr>
 							<td><?= $p->url ? ("<a href='" . h($p->url) . "' target='_blank' rel='noreferrer'>" . h($name) . "</a>") : h($name) ?></td>
-							<td><?= h($p->version) ?></td>
+							<td class="version"><?= h($p->installed) ?></td>
+							<td><?= h($p->required) ?></td>
 						</tr>
 					<?php endforeach ?>
 				</tbody>
 			</table>
 			<?php endforeach ?>
-			<p><small>Source: <?= Helpers::editorLink($file) ?></small></p>
+			<p><small>Source: <?= Helpers::editorLink($jsonFile) . h(' & ') . Helpers::editorLink($lockFile) ?></small></p>
 		<?php endif ?>
 	</div>
 </div>
