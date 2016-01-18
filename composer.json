@@ -1,0 +1,26 @@
+{
+	"name": "milo/vendor-versions",
+	"type": "library",
+	"description": "Bar with versions list of vendor libraries for Tracy",
+	"keywords": ["tracy", "bar", "vendor", "composer", "composer.lock"],
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Miloslav Hůla",
+			"email": "miloslav.hula@gmail.com",
+			"homepage": "https://github.com/milo"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"tracy/tracy": "^2.3.0"
+	},
+	"suggest": {
+		"nette/di": "For automatic panel loading"
+	},
+	"autoload": {
+		"psr-4": {
+			"Milo\\VendorVersions\\": "src/"
+		}
+	}
+}
