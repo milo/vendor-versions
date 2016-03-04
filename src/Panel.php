@@ -60,10 +60,8 @@ class Panel implements Tracy\IBarPanel
 		$installed = $this->decode($lockFile);
 
 		if ($this->error === NULL) {
-			$required = array_filter($required);
-			$installed = array_filter($installed);
-			$required += ['require' => [], 'require-dev' => []];
-			$installed += ['packages' => [], 'packages-dev' => []];
+			$required = array_filter($required) + ['require' => [], 'require-dev' => []];
+			$installed = array_filter($installed) + ['packages' => [], 'packages-dev' => []];
 			$data = [
 				'Packages' => self::format($installed['packages'], $required['require']),
 				'Dev Packages' => self::format($installed['packages-dev'], $required['require-dev']),
