@@ -12,9 +12,9 @@ If you are using Nette DI container, register panel in `config.neon`:
 extensions:
 	vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
 
-# Optionally set path do directory with composer.json and composer.lock files
+# Optionally set file to composer.json file
 vendorVersions:
-	dir: 'some/path'
+	file: 'some/path/composer.json'
 ```
 
 If you are not using Nette DI, register panel manually:
@@ -24,8 +24,11 @@ Tracy\Debugger::getBar()->addPanel(
 );
 
 
-# Optionally with a path to directory with composer.json and composer.lock files
+# Optionally with a path to the composer.json file
+# Which might have been renamed e.g. lib.json
+# e.g. COMPOSER=lib.json composer update --no-dev
+
 Tracy\Debugger::getBar()->addPanel(
-	new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
+	new Milo\VendorVersions\Panel(__DIR__ . '/some/dir/composer.json')
 );
 ```
