@@ -10,11 +10,11 @@ Use [Composer](https://getcomposer.org) and require `milo/vendor-versions` packa
 If you are using Nette DI container, register panel in `config.neon`:
 ```yaml
 extensions:
-	vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
+    vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
 
 # Optionally set file to composer.json file
 vendorVersions:
-	file: 'some/path/composer.json'
+    file: 'some/path/composer.json'
 ```
 
 If you are not using Nette DI, register panel manually:
