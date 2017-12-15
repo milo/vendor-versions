@@ -4,8 +4,12 @@ namespace Milo\VendorVersions\Panel;
 
 use Tracy\Helpers;
 
-function h($str) {
-	return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+if (!function_exists(__NAMESPACE__.'\h'))
+{
+    function h($str)
+    {
+        return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
 }
 
 /**
@@ -16,57 +20,57 @@ function h($str) {
  */
 ?>
 <style class="tracy-debug">
-	.milo-VendorVersionsPanel h2 {
-		font-weight: bold !important;
-	}
+    .milo-VendorVersionsPanel h2 {
+        font-weight: bold !important;
+    }
 
-	.milo-VendorVersionsPanel small {
-		font-size: 85% !important;
-	}
+    .milo-VendorVersionsPanel small {
+        font-size: 85% !important;
+    }
 
-	.milo-VendorVersionsPanel .tracy-inner {
-		width: 500px;
-	}
+    .milo-VendorVersionsPanel .tracy-inner {
+        width: 500px;
+    }
 
-	.milo-VendorVersionsPanel table {
-		white-space: nowrap;
-		font: 9pt/1.5 Consolas,monospace !important;
-	}
+    .milo-VendorVersionsPanel table {
+        white-space: nowrap;
+        font: 9pt/1.5 Consolas,monospace !important;
+    }
 
-	.milo-VendorVersionsPanel td.version {
-		/*color: green !important;*/
-		font-weight: bold !important;
-	}
+    .milo-VendorVersionsPanel td.version {
+        /*color: green !important;*/
+        font-weight: bold !important;
+    }
 </style>
 
 <div class="milo-VendorVersionsPanel">
-	<h1>Vendor Versions</h1>
-	<div class="tracy-inner">
-		<?php if ($error): ?>
-			<span style="color:red"><?= h($error) ?></span>
-		<?php else: ?>
-			<?php foreach ($data as $title => $packages): ?>
-			<h2><?= h($title) ?></h2>
-			<table>
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Installed</th>
-						<th>Required</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($packages as $name => $p): ?>
-						<tr>
-							<td><?= $p->url ? ("<a href='" . h($p->url) . "' target='_blank' rel='noreferrer'>" . h($name) . "</a>") : h($name) ?></td>
-							<td class="version"><?= h($p->installed) ?></td>
-							<td><?= h($p->required) ?></td>
-						</tr>
-					<?php endforeach ?>
-				</tbody>
-			</table>
-			<?php endforeach ?>
-			<p><small>Source: <?= Helpers::editorLink($jsonFile) . h(' & ') . Helpers::editorLink($lockFile) ?></small></p>
-		<?php endif ?>
-	</div>
+    <h1><?php echo basename($jsonFile) ?> versions</h1>
+    <div class="tracy-inner">
+<?php if ($error): ?>
+            <span style="color:red"><?= h($error) ?></span>
+<?php else: ?>
+    <?php foreach ($data as $title => $packages): ?>
+                <h2><?= h($title) ?></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Installed</th>
+                            <th>Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        <?php foreach ($packages as $name => $p): ?>
+                            <tr>
+                                <td><?= $p->url ? ("<a href='".h($p->url)."' target='_blank' rel='noreferrer'>".h($name)."</a>") : h($name) ?></td>
+                                <td class="version"><?= h($p->installed) ?></td>
+                                <td><?= h($p->required) ?></td>
+                            </tr>
+                <?php endforeach ?>
+                    </tbody>
+                </table>
+    <?php endforeach ?>
+            <p><small>Source: <?= Helpers::editorLink($jsonFile).h(' & ').Helpers::editorLink($lockFile) ?></small></p>
+<?php endif ?>
+    </div>
 </div>

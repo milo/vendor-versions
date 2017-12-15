@@ -37,7 +37,7 @@ class Extension extends Nette\DI\CompilerExtension
 			$container = $this->getContainerBuilder();
 			$container->getDefinition('tracy.bar')
 				->addSetup('addPanel', [
-					new Nette\DI\Statement('Milo\VendorVersions\Panel', [$config['dir']])
+					new Nette\DI\Statement('Milo\VendorVersions\Panel', [$config['dir'].'/composer.json'])
 				]);
 		}
 	}
