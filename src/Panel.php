@@ -71,6 +71,9 @@ class Panel implements Tracy\IBarPanel
 		}
 
 		$error = $this->error;
+		$esc = function ($str) {
+			return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		};
 
 		require __DIR__ . '/templates/Panel.panel.phtml';
 		return ob_get_clean();

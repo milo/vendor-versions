@@ -4,15 +4,12 @@ namespace Milo\VendorVersions\Panel;
 
 use Tracy\Helpers;
 
-function h($str) {
-	return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-}
-
 /**
  * @var  string|null $lockFile
  * @var  string|null $jsonFile
  * @var  string|null $error
  * @var  array $data
+ * @var  callable $esc
  */
 ?>
 <style class="tracy-debug">
@@ -43,10 +40,10 @@ function h($str) {
 	<h1>Vendor Versions</h1>
 	<div class="tracy-inner">
 		<?php if ($error): ?>
-			<span style="color:red"><?= h($error) ?></span>
+			<span style="color:red"><?= $esc($error) ?></span>
 		<?php else: ?>
 			<?php foreach ($data as $title => $packages): ?>
-			<h2><?= h($title) ?></h2>
+			<h2><?= $esc($title) ?></h2>
 			<table>
 				<thead>
 					<tr>
@@ -58,15 +55,15 @@ function h($str) {
 				<tbody>
 					<?php foreach ($packages as $name => $p): ?>
 						<tr>
-							<td><?= $p->url ? ("<a href='" . h($p->url) . "' target='_blank' rel='noreferrer'>" . h($name) . "</a>") : h($name) ?></td>
-							<td class="version"><?= h($p->installed) ?></td>
-							<td><?= h($p->required) ?></td>
+							<td><?= $p->url ? ("<a href='" . $esc($p->url) . "' target='_blank' rel='noreferrer'>" . $esc($name) . "</a>") : $esc($name) ?></td>
+							<td class="version"><?= $esc($p->installed) ?></td>
+							<td><?= $esc($p->required) ?></td>
 						</tr>
 					<?php endforeach ?>
 				</tbody>
 			</table>
 			<?php endforeach ?>
-			<p><small>Source: <?= Helpers::editorLink($jsonFile) . h(' & ') . Helpers::editorLink($lockFile) ?></small></p>
+			<p><small>Source: <?= Helpers::editorLink($jsonFile) . $esc(' & ') . Helpers::editorLink($lockFile) ?></small></p>
 		<?php endif ?>
 	</div>
 </div>
