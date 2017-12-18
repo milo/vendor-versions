@@ -12,34 +12,34 @@ Use [Composer](https://getcomposer.org) and require `milo/vendor-versions` packa
 Register panel in `config.neon`:
 ```yaml
 extensions:
-	vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
+    vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
 
 # Optionally set path to composer.json file
 vendorVersions:
-	path: 'path/to/composer.json'
+    path: 'path/to/composer.json'
 
 # When you use panel multiple times, you may wish to adjust some visual properties
 vendorVersions:
-	panelTitle: 'For deployment'
-	iconColor: 'green'
+    panelTitle: 'For deployment'
+    iconColor: 'green'
 ```
 
 
 ## Manual panel registration
 ```php
 Tracy\Debugger::getBar()->addPanel(
-	new Milo\VendorVersions\Panel
+    new Milo\VendorVersions\Panel
 );
 
 
 # Optionally set path to composer.json file
 Tracy\Debugger::getBar()->addPanel(
-	new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
+    new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
 );
 
 # When you use panel multiple times, you may wish to adjust some visual properties
 Tracy\Debugger::getBar()->addPanel(
-	$panel = new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
+    $panel = new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
 );
 $panel->setPanelTitle('For deployment');
 $panel->setIconColor('green');
