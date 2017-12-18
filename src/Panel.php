@@ -18,6 +18,12 @@ class Panel implements Tracy\IBarPanel
 	/** @var string */
 	private $dir;
 
+	/** @var string|null */
+	private $panelTitle;
+
+	/** @var string|null */
+	private $iconColor;
+
 
 	/**
 	 * @param  string $composerLockDir  path to composer.lock's directory
@@ -36,11 +42,32 @@ class Panel implements Tracy\IBarPanel
 
 
 	/**
+	 * @param  string $color
+	 * @return void
+	 */
+	public function setIconColor($color)
+	{
+		$this->iconColor = $color;
+	}
+
+
+	/**
+	 * @param  string $title
+	 * @return void
+	 */
+	public function setPanelTitle($title)
+	{
+		$this->panelTitle = $title;
+	}
+
+
+	/**
 	 * @return string
 	 */
 	public function getTab()
 	{
 		ob_start();
+		$iconColor = $this->escapeHtml($this->iconColor ?: '#478CCC');
 		require __DIR__ . '/templates/Panel.tab.phtml';
 		return ob_get_clean();
 	}
@@ -70,9 +97,10 @@ class Panel implements Tracy\IBarPanel
 			];
 		}
 
+		$panelTitle = $this->panelTitle ?: 'Vendor Versions';
 		$error = $this->error;
 		$esc = function ($str) {
-			return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+			return $this->escapeHtml($str);
 		};
 
 		require __DIR__ . '/templates/Panel.panel.phtml';
@@ -129,5 +157,15 @@ class Panel implements Tracy\IBarPanel
 		}
 
 		return $decoded;
+	}
+
+
+	/**
+	 * @param  string $str
+	 * @return string
+	 */
+	private function escapeHtml($str)
+	{
+		return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
 }

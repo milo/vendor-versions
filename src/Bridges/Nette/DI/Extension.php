@@ -14,6 +14,8 @@ class Extension extends Nette\DI\CompilerExtension
 {
 	private $defaults = [
 		'dir' => null,
+		'panelTitle' => null,
+		'iconColor' => null,
 	];
 
 	/** @var bool */
@@ -29,16 +31,21 @@ class Extension extends Nette\DI\CompilerExtension
 	}
 
 
+
 	public function loadConfiguration()
 	{
 		if ($this->debugMode) {
 			$config = $this->getConfig() + $this->defaults;
 
-			$container = $this->getContainerBuilder();
-			$container->getDefinition('tracy.bar')
-				->addSetup('addPanel', [
-					new Nette\DI\Statement('Milo\VendorVersions\Panel', [$config['dir']])
-				]);
+			$builder = $this->getContainerBuilder();
+			$builder->addDefinition($this->prefix('panel'))
+				->setFactory('Milo\VendorVersions\Panel', [$config['dir']])
+				->setAutowired(false)
+				->addSetup('setPanelTitle', [$config['panelTitle']])
+				->addSetup('setIconColor', [$config['iconColor']]);
+
+			$builder->getDefinition('tracy.bar')
+				->addSetup('addPanel', ['@' . $this->prefix('panel')]);
 		}
 	}
 }

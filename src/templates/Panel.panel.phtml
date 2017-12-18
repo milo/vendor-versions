@@ -5,6 +5,7 @@ namespace Milo\VendorVersions\Panel;
 use Tracy\Helpers;
 
 /**
+ * @var  string $panelTitle
  * @var  string|null $lockFile
  * @var  string|null $jsonFile
  * @var  string|null $error
@@ -37,7 +38,7 @@ use Tracy\Helpers;
 </style>
 
 <div class="milo-VendorVersionsPanel">
-	<h1>Vendor Versions</h1>
+	<h1><?= $esc($panelTitle) ?></h1>
 	<div class="tracy-inner">
 		<?php if ($error): ?>
 			<span style="color:red"><?= $esc($error) ?></span>
