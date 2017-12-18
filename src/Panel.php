@@ -88,7 +88,7 @@ class Panel implements Tracy\IBarPanel
 		foreach ($packages as $p) {
 			$data[$p['name']] = (object) [
 				'installed' => $p['version'] . ($p['version'] === 'dev-master'
-					? (' #' . substr($p['source']['reference'], 0, 7))
+					? ('#' . substr($p['source']['reference'], 0, 7))
 					: ''
 				),
 
