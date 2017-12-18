@@ -13,7 +13,8 @@ use Nette;
 class Extension extends Nette\DI\CompilerExtension
 {
 	private $defaults = [
-		'dir' => null,
+		'dir' => null,  /* @deprecated */
+		'path' => null,
 		'panelTitle' => null,
 		'iconColor' => null,
 	];
@@ -39,7 +40,7 @@ class Extension extends Nette\DI\CompilerExtension
 
 			$builder = $this->getContainerBuilder();
 			$builder->addDefinition($this->prefix('panel'))
-				->setFactory('Milo\VendorVersions\Panel', [$config['dir']])
+				->setFactory('Milo\VendorVersions\Panel', [$config['path'] ?: $config['dir']])
 				->setAutowired(false)
 				->addSetup('setPanelTitle', [$config['panelTitle']])
 				->addSetup('setIconColor', [$config['iconColor']]);

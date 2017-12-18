@@ -16,7 +16,7 @@ class Panel implements Tracy\IBarPanel
 	private $error;
 
 	/** @var string */
-	private $dir;
+	private $path;
 
 	/** @var string|null */
 	private $panelTitle;
@@ -26,17 +26,17 @@ class Panel implements Tracy\IBarPanel
 
 
 	/**
-	 * @param  string $composerLockDir  path to composer.lock's directory
+	 * @param  string $composerJsonPath  path to composer.json's file or directory
 	 */
-	public function __construct($composerLockDir = null)
+	public function __construct($composerJsonPath = null)
 	{
-		$composerLockDir = $composerLockDir ?: __DIR__ . '/../../../../';
-		if (!is_dir($dir = @realpath($composerLockDir))) {
-			$this->error = "Path '$composerLockDir' is not a directory.";
-		} elseif (!is_file($dir . DIRECTORY_SEPARATOR . 'composer.lock')) {
-			$this->error = "Directory '$dir' does not contain the composer.lock file.";
+		$path = realpath($composerJsonPath ?: __DIR__ . '/../../../../composer.json');
+		if ($path === false) {
+			$this->error = "Path '$composerJsonPath' does not exist.";
+		} elseif (is_dir($path)) {
+			$this->path = $path . DIRECTORY_SEPARATOR . 'composer.json';
 		} else {
-			$this->dir = $dir;
+			$this->path = $path;
 		}
 	}
 
@@ -80,8 +80,8 @@ class Panel implements Tracy\IBarPanel
 	{
 		ob_start();
 
-		$jsonFile = $this->dir . DIRECTORY_SEPARATOR . 'composer.json';
-		$lockFile = $this->dir . DIRECTORY_SEPARATOR . 'composer.lock';
+		$jsonFile = $this->path;
+		$lockFile = substr_replace($jsonFile, 'lock', strrpos($jsonFile, '.') + 1);
 
 		$required = $this->decode($jsonFile);
 		$installed = $this->decode($lockFile);
@@ -144,6 +144,11 @@ class Panel implements Tracy\IBarPanel
 	 */
 	private function decode($file)
 	{
+		if (!is_file($file)) {
+			$this->error = "File '$file' does not exist.'";
+			return null;
+		}
+
 		$json = @file_get_contents($file);
 		if ($json === false) {
 			$this->error = error_get_last()['message'];
