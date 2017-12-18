@@ -22,7 +22,7 @@ class Panel implements Tracy\IBarPanel
 	/**
 	 * @param  string $composerLockDir  path to composer.lock's directory
 	 */
-	public function __construct($composerLockDir = NULL)
+	public function __construct($composerLockDir = null)
 	{
 		$composerLockDir = $composerLockDir ?: __DIR__ . '/../../../../';
 		if (!is_dir($dir = @realpath($composerLockDir))) {
@@ -59,7 +59,7 @@ class Panel implements Tracy\IBarPanel
 		$required = $this->decode($jsonFile);
 		$installed = $this->decode($lockFile);
 
-		if ($this->error === NULL) {
+		if ($this->error === null) {
 			$required = array_filter($required);
 			$installed = array_filter($installed);
 			$required += ['require' => [], 'require-dev' => []];
@@ -94,11 +94,11 @@ class Panel implements Tracy\IBarPanel
 
 				'required' => isset($required[$p['name']])
 					? $required[$p['name']]
-					: NULL,
+					: null,
 
 				'url' => isset($p['source']['url'])
 					? preg_replace('/\.git$/', '', $p['source']['url'])
-					: NULL,
+					: null,
 			];
 		}
 
@@ -109,23 +109,22 @@ class Panel implements Tracy\IBarPanel
 
 	/**
 	 * @param  string $file
-	 * @return array|NULL
+	 * @return array|null
 	 */
 	private function decode($file)
 	{
 		$json = @file_get_contents($file);
-		if ($json === FALSE) {
+		if ($json === false) {
 			$this->error = error_get_last()['message'];
-			return NULL;
+			return null;
 		}
 
-		$decoded = @json_decode($json, TRUE);
+		$decoded = @json_decode($json, true);
 		if (!is_array($decoded)) {
 			$this->error = error_get_last()['message'];
-			return NULL;
+			return null;
 		}
 
 		return $decoded;
 	}
-
 }

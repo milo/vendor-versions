@@ -13,7 +13,7 @@ use Nette;
 class Extension extends Nette\DI\CompilerExtension
 {
 	private $defaults = [
-		'dir' => NULL,
+		'dir' => null,
 	];
 
 	/** @var bool */
@@ -41,5 +41,4 @@ class Extension extends Nette\DI\CompilerExtension
 				]);
 		}
 	}
-
 }
