@@ -7,7 +7,9 @@ Vendor Versions is a bar panel for [Tracy](https://tracy.nette.org/) debugger. I
 # Installation
 Use [Composer](https://getcomposer.org) and require `milo/vendor-versions` package.
 
-If you are using Nette DI container, register panel in `config.neon`:
+
+## With the Nette DI Container
+Register panel in `config.neon`:
 ```yaml
 extensions:
 	vendorVersions: Milo\VendorVersions\Bridges\Nette\DI\Extension(%debugMode%)
@@ -15,9 +17,15 @@ extensions:
 # Optionally set path to composer.json file
 vendorVersions:
 	path: 'path/to/composer.json'
+
+# When you use panel multiple times, you may wish to adjust some visual properties
+vendorVersions:
+	panelTitle: 'For deployment'
+	iconColor: 'green'
 ```
 
-If you are not using Nette DI, register panel manually:
+
+## Manual panel registration
 ```php
 Tracy\Debugger::getBar()->addPanel(
 	new Milo\VendorVersions\Panel
@@ -28,4 +36,11 @@ Tracy\Debugger::getBar()->addPanel(
 Tracy\Debugger::getBar()->addPanel(
 	new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
 );
+
+# When you use panel multiple times, you may wish to adjust some visual properties
+Tracy\Debugger::getBar()->addPanel(
+	$panel = new Milo\VendorVersions\Panel(__DIR__ . '/some/dir')
+);
+$panel->setPanelTitle('For deployment');
+$panel->setIconColor('green');
 ```
