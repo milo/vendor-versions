@@ -33,34 +33,32 @@ use Tracy\Helpers;
 	}
 </style>
 
-<div class="milo-VendorVersionsPanel">
-	<h1><?= $esc($panelTitle) ?></h1>
-	<div class="tracy-inner">
-		<?php if ($error): ?>
-			<span style="color:red"><?= $esc($error) ?></span>
-		<?php else: ?>
-			<?php foreach ($data as $title => $packages): ?>
-			<h2><?= $esc($title) ?></h2>
-			<table>
-				<thead>
+<h1><?= $esc($panelTitle) ?></h1>
+<div class="tracy-inner milo-VendorVersionsPanel">
+	<?php if ($error): ?>
+		<span style="color:red"><?= $esc($error) ?></span>
+	<?php else: ?>
+		<?php foreach ($data as $title => $packages): ?>
+		<h2><?= $esc($title) ?></h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Installed</th>
+					<th>Required</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ($packages as $name => $p): ?>
 					<tr>
-						<th>Name</th>
-						<th>Installed</th>
-						<th>Required</th>
+						<td><?= $p->url ? ("<a href='" . $esc($p->url) . "' target='_blank' rel='noreferrer'>" . $esc($name) . "</a>") : $esc($name) ?></td>
+						<td class="version"><?= $esc($p->installed) ?></td>
+						<td><?= $esc($p->required) ?></td>
 					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($packages as $name => $p): ?>
-						<tr>
-							<td><?= $p->url ? ("<a href='" . $esc($p->url) . "' target='_blank' rel='noreferrer'>" . $esc($name) . "</a>") : $esc($name) ?></td>
-							<td class="version"><?= $esc($p->installed) ?></td>
-							<td><?= $esc($p->required) ?></td>
-						</tr>
-					<?php endforeach ?>
-				</tbody>
-			</table>
-			<?php endforeach ?>
-			<p><small>Source: <?= Helpers::editorLink($jsonFile) . $esc(' & ') . Helpers::editorLink($lockFile) ?></small></p>
-		<?php endif ?>
-	</div>
+				<?php endforeach ?>
+			</tbody>
+		</table>
+		<?php endforeach ?>
+		<p><small>Source: <?= Helpers::editorLink($jsonFile) . $esc(' & ') . Helpers::editorLink($lockFile) ?></small></p>
+	<?php endif ?>
 </div>
