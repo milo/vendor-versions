@@ -64,7 +64,7 @@ class Panel implements Tracy\IBarPanel
 	/**
 	 * @return string
 	 */
-	public function getTab()
+	public function getTab(): ?string
 	{
 		ob_start();
 		$iconColor = $this->escapeHtml($this->iconColor ?: '#478CCC');
@@ -76,7 +76,7 @@ class Panel implements Tracy\IBarPanel
 	/**
 	 * @return string
 	 */
-	public function getPanel()
+	public function getPanel(): ?string
 	{
 		ob_start();
 
