@@ -80,15 +80,12 @@ class Panel implements Tracy\IBarPanel
 	{
 		ob_start();
 
-		$jsonFile = $this->path;
-		$lockFile = substr_replace($jsonFile, 'lock', strrpos($jsonFile, '.') + 1);
-
-		$required = $this->decode($jsonFile);
-		$installed = $this->decode($lockFile);
-
 		if ($this->error === null) {
-			$required = array_filter($required);
-			$installed = array_filter($installed);
+			$jsonFile = $this->path;
+			$lockFile = substr_replace($jsonFile, 'lock', strrpos($jsonFile, '.') + 1);
+
+			$required = array_filter($this->decode($jsonFile));
+			$installed = array_filter($this->decode($lockFile));
 			$required += ['require' => [], 'require-dev' => []];
 			$installed += ['packages' => [], 'packages-dev' => []];
 			$data = [
@@ -171,6 +168,6 @@ class Panel implements Tracy\IBarPanel
 	 */
 	private function escapeHtml($str)
 	{
-		return htmlSpecialChars($str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		return htmlSpecialChars((string) $str, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
 }
